@@ -1,0 +1,13 @@
+.DS_Store
+.venv/
+__pycache__/
+backend/kitchen.db
+firebase-service-account.json
+local.properties
+android/.gradle/
+android/**/build/
+android/captures/
+android/local.properties
+*.pyc
+.env
+.DS_Store.firebase/

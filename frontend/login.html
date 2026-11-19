@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f97316">
+  <title>Sign in | MyKitchen Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="login-page">
+  <main class="login-shell">
+    <section class="login-art" aria-label="MyKitchen Manager">
+      <a class="brand brand-light" href="/login.html">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <span>MyKitchen <b>Manager</b></span>
+      </a>
+      <div class="art-copy">
+        <span class="eyebrow eyebrow-light">A little more in order</span>
+        <h1>Your kitchen,<br>in good hands.</h1>
+        <p>Keep track of the things that make home feel like home.</p>
+      </div>
+      <div class="art-note"><span class="note-icon">✳</span><span>Less guessing.<br><b>More home cooking.</b></span></div>
+      <div class="art-orbit orbit-one"></div>
+      <div class="art-orbit orbit-two"></div>
+    </section>
+    <section class="login-panel">
+      <div class="login-form-wrap">
+        <a class="brand brand-mobile" href="/login.html">
+          <span class="brand-mark" aria-hidden="true">M</span>
+          <span>MyKitchen <b>Manager</b></span>
+        </a>
+        <span class="eyebrow">WELCOME BACK</span>
+        <h2>Sign in to your kitchen</h2>
+        <p class="muted login-intro">Your pantry is just a moment away.</p>
+        <form id="login-form">
+          <label for="username">Username</label>
+          <input id="username" name="username" autocomplete="username" placeholder="Enter your username" required>
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+          <p class="form-error" id="login-error" role="alert" hidden>That username or password doesn't look right.</p>
+          <button class="button button-primary button-wide login-submit" type="submit">Sign in <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="demo-hint"><span class="hint-dot"></span>Demo access is ready to use</p>
+        <p class="login-credentials">Username <b>admin</b><span>·</span>Password <b>kitchen123</b></p>
+        <p class="login-foot">A calmer kitchen starts here.</p>
+      </div>
+    </section>
+  </main>
+  <script>
+    if (sessionStorage.getItem("mykitchen-auth") === "true") location.replace("/");
+    document.getElementById("login-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const error = document.getElementById("login-error");
+      if (username === "admin" && password === "kitchen123") {
+        sessionStorage.setItem("mykitchen-auth", "true");
+        location.replace("/");
+        return;
+      }
+      error.hidden = false;
+      document.getElementById("password").setAttribute("aria-invalid", "true");
+    });
+  </script>
+</body>
+</html>

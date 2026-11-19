@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function validItemFields(data) {
+      return data.keys().hasAll([
+          'name', 'category', 'quantity', 'unit', 'minimum_stock',
+          'created_at', 'updated_at'
+        ])
+        && data.keys().hasOnly([
+          'name', 'category', 'quantity', 'unit', 'minimum_stock',
+          'created_at', 'updated_at'
+        ])
+        && data.name is string
+        && data.name.size() > 0
+        && data.name.size() <= 120
+        && data.category in [
+          'Grains', 'Pulses', 'Spices', 'Oils', 'Dairy', 'Vegetables', 'Other'
+        ]
+        && data.quantity is int
+        && data.quantity >= 0
+        && data.unit is string
+        && data.minimum_stock is int
+        && data.minimum_stock >= 0
+        && data.created_at is timestamp
+        && data.updated_at is timestamp;
+    }
+
+    match /inventory_items/{itemId} {
+      allow read: if true;
+      allow create: if validItemFields(request.resource.data)
+        && request.resource.data.unit == 'Packets'
+        && request.resource.data.created_at == request.time
+        && request.resource.data.updated_at == request.time;
+      allow update: if validItemFields(request.resource.data)
+        && (
+          request.resource.data.unit == 'Packets'
+          || (
+            request.resource.data.unit == resource.data.unit
+            && request.resource.data.unit in [
+              'Kg', 'Grams', 'Litres', 'Ml', 'Pieces', 'Bottles'
+            ]
+          )
+        )
+        && request.resource.data.created_at == resource.data.created_at
+        && request.resource.data.updated_at == request.time;
+      allow delete: if true;
+    }
+  }
+}
